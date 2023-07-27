@@ -42,6 +42,8 @@ Afterwards, move the file `llama-2-13b.ggmlv3.q4_0.bin` into the same subfolder 
 
 ### Importing the Nodes ###
 
+These flows use the Node-RED extension [node-red-reusable-flows](https://github.com/rozek/node-red-reusable-flows) ("Reusable Flows" which allow multiply needed flows to be defined once and then invoked from multiple places) which should therefore be installed first.
+
 Finally, open the Flow Editor of your Node-RED server and import the contents of [OpenAI-API-flow.json](./OpenAI-API-flow.json). After deploying your changes, you are ready to use the implemented endpoints.
 
 ## Configuration ##
