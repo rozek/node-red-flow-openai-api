@@ -52,7 +52,24 @@ The node "define common settings" allows you to configure a few parameters which
 * **`count-tokens`**<br>may either be set to `true` or `false` depending on whether you want the actual token numbers (or just dummies) to be used when calculating the statistics of every request - `true` is closer to the behaviour of OpenAI, but `false` saves you a bit of time
 * **`stop-sequence`**<br>defines a default "stop sequence" (or "reverse prompt" as llama.cpp calls it) which helps to avoid unnecessarily generated tokens in a chat completion request
 
+In principle, the predefined defaults should work quite well - although you may want to change the default `API-Key`
+
 ### Prompt Template ###
+
+An incoming chat completion request contains a list of "system", "user" and "assistant" messages which first have to be conveted into a single prompt which may then be passed to llama.cpp. The `prompt-template` object provides a template for each message type:
+
+```json
+{
+  "system":"{input}\n",
+  "user":"### Instruction: {input}\n",
+  "assistant":"### Response: {input}\n",
+  "suffix":"### Response:"
+}
+```
+
+When constructing the actual prompt, all given messages will be converted and concatenated one after the other using the appropriate template for the message's `role` and replacing the `{input}` placeholder by the message's `content`. Finally, the `suffix` tempalte is appended and the result passed to llama.cpp.
+
+Surprisingly, the shown templates work much better than those recommended on [HuggingFace](https://huggingface.co/blog/llama2#how-to-prompt-llama-2), but your mileage may vary...
 
 ## Usage ##
 
