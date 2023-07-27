@@ -18,19 +18,35 @@ Start by creating a subfolder called `ai` within the installation folder of your
 
 ### Building the Executable ###
 
+Under the hood, the flows from this repository run native executables from [llama.cpp](https://github.com/rozek/llama.cpp). Simply follow the instructions found in section [Usage](https://github.com/rozek/llama.cpp#usage) of the llama.cpp docs to build these executables for your platform.
 
+Afterwards, rename 
+
+* `main` to `llama`,
+* `tokenization` to `llama-tokens` and
+* `embedding` to `llama-embeddings`
+
+and copy these files only into the subfolder `ai` you created before.
 
 ### Preparing the Model ###
 
-download file [`llama-2-13b.ggmlv3.q4_0.bin`](https://huggingface.co/TheBloke/Llama-2-13B-GGML/blob/main/llama-2-13b.ggmlv3.q4_0.bin) from HuggingFace
+Just download the model from [HuggingFace](https://huggingface.co/TheBloke/Llama-2-13B-GGML/blob/main/llama-2-13b.ggmlv3.q4_0.bin) - it already has the proper format.
 
+> Nota bene: right now, this model has been hard-coded into the flows - but this may easily be changed in the function sources
+
+Afterwards, move the file `llama-2-13b.ggmlv3.q4_0.bin` into the same subfolder `ai` where you already placed the llama.cpp executables.
 
 ### Importing the Nodes ###
 
+Finally, open the Flow Editor of your Node-RED server and import the contents of [OpenAI-API-flow.json](./OpenAI-API-flow.json). After deploying your changes, you are ready to use the implemented endpoints.
 
+## Configuration ##
 
 ## Usage ##
 
+The flows in this repository implement a small, but relevant subset of the OpenAI API - just enough to support LangChain and similar tools to run inferences on local hardware rather than somewhere in the cloud.
+
+The set of supported request properties is an intersection of those [specified bei OpenAI](https://platform.openai.com/docs/api-reference) and those [accepted by llama.cpp](https://github.com/rozek/llama.cpp/blob/master/examples/main/README.md)
 
 ### /v1/embeddings ###
 
