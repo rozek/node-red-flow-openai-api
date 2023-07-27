@@ -10,12 +10,38 @@ The actual "heavy lifting" is done by [llama.cpp](https://github.com/rozek/llama
 
 Right now, the [13B variant of the LLaMA 2 LLM](https://huggingface.co/TheBloke/Llama-2-13B-GGML) has been hard-coded into the llama.cpp invocation and the parameter defaults were chosen with a view to achieving the best possible results.
 
+## Installation ##
 
-...
+Start by creating a subfolder called `ai` within the installation folder of your Node-RED server. This subfolder will later store the llama.cpp executables and the actual model. Using such a subfolder helps keeping the folder structure of your server clean if you decide to play with other AI models as well.
+
+### Building the Executable ###
+
+
+
+### Preparing the Model ###
 
 download file [`llama-2-13b.ggmlv3.q4_0.bin`](https://huggingface.co/TheBloke/Llama-2-13B-GGML/blob/main/llama-2-13b.ggmlv3.q4_0.bin) from HuggingFace
 
-...
+
+### Importing the Nodes ###
+
+
+
+## Usage ##
+
+
+### /v1/embeddings ###
+
+modelled after the OpenAI endpoint to [create an embedding vector](https://platform.openai.com/docs/api-reference/embeddings)
+
+### /v1/completions ###
+
+modelled after the OpenAI endpoint to [create a completion](https://platform.openai.com/docs/api-reference/completions)
+
+### /v1/chat/completion ###
+
+modelled after the OpenAI endpoint to [create a chat completion](https://platform.openai.com/docs/api-reference/chat)
+
 
 ## License ##
 
