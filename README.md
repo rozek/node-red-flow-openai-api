@@ -79,15 +79,15 @@ The set of supported request properties is an intersection of those [specified b
 
 ### /v1/embeddings ###
 
-`/v1/embeddings` is modelled after the OpenAI endpoint to [create an embedding vector](https://platform.openai.com/docs/api-reference/embeddings) The parameters `model` and `input` are respected, `user` is ignored.
+`/v1/embeddings` is modelled after the OpenAI endpoint to [create an embedding vector](https://platform.openai.com/docs/api-reference/embeddings). The parameters `model` and `input` are respected, `user` is ignored.
 
 ### /v1/completions ###
 
-`/v1/completions` is modelled after the OpenAI endpoint to [create a completion](https://platform.openai.com/docs/api-reference/completions) The parameters `model`, `prompt`, `max_tokens`, `temperature`, `top_p`, `stop`, `frequency_penalty` are respected, `suffix`, `n`, `stream`, `logprobs`, `echo`, `presence_penalty`, `best_of`, `logit_bias` and `user` are ignored.
+`/v1/completions` is modelled after the OpenAI endpoint to [create a completion](https://platform.openai.com/docs/api-reference/completions). The parameters `model`, `prompt`, `max_tokens`, `temperature`, `top_p`, `stop`, `frequency_penalty` are respected, `suffix`, `n`, `stream`, `logprobs`, `echo`, `presence_penalty`, `best_of`, `logit_bias` and `user` are ignored.
 
 ### /v1/chat/completion ###
 
-`/v1/chat/completions` is modelled after the OpenAI endpoint to [create a chat completion](https://platform.openai.com/docs/api-reference/chat) The parameters `model`, `messages`, `max_tokens`, `temperature`, `top_p`, `stop`, `frequency_penalty` are respected, `functions`, `function_call`, `n`, `stream`, `presence_penalty`, `logit_bias` and `user` are ignored.
+`/v1/chat/completions` is modelled after the OpenAI endpoint to [create a chat completion](https://platform.openai.com/docs/api-reference/chat). The parameters `model`, `messages`, `max_tokens`, `temperature`, `top_p`, `stop`, `frequency_penalty` are respected, `functions`, `function_call`, `n`, `stream`, `presence_penalty`, `logit_bias` and `user` are ignored.
 
 ## Best Practices ##
 
