@@ -1,0 +1,69 @@
+[
+    {
+        "id": "b8b1b58c730ab079",
+        "type": "change",
+        "z": "82da24bd0fb90b8b",
+        "name": "define common settings",
+        "rules": [
+            {
+                "t": "set",
+                "p": "API-Key",
+                "pt": "flow",
+                "to": "sk-xxxx",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "number-of-threads",
+                "pt": "flow",
+                "to": "4",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "context-length",
+                "pt": "flow",
+                "to": "4096",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "number-of-batches",
+                "pt": "flow",
+                "to": "8",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "prompt-template",
+                "pt": "flow",
+                "to": "{\"system\":\"[INST] <<SYS>>\\n{input}<</SYS>>\\n\\n\",\"user\":\"{input} [/INST]\\n\",\"assistant\":\"{input} [INST]\\n\",\"suffix\":\"\"}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "count-tokens",
+                "pt": "flow",
+                "to": "false",
+                "tot": "bool"
+            },
+            {
+                "t": "set",
+                "p": "stop-sequence",
+                "pt": "flow",
+                "to": "[INST]",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 790,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    }
+]
