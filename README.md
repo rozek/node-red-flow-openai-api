@@ -73,7 +73,7 @@ An incoming chat completion request contains a list of "system", "user" and "ass
 
 When constructing the actual prompt, all given messages will be converted and concatenated one after the other using the appropriate template for the message's `role` and replacing the `{input}` placeholder by the message's `content`. Finally, the `suffix` tempalte is appended and the result passed to llama.cpp.
 
-Surprisingly, the shown templates work much better than those recommended on [HuggingFace](https://huggingface.co/blog/llama2#how-to-prompt-llama-2), but your mileage may vary...
+Surprisingly, the shown templates work much better than those recommended on [HuggingFace](https://huggingface.co/blog/llama2#how-to-prompt-llama-2), but your mileage may vary, of course. If you prefer the suggested prompts from the linked blog post, you may simply import an [alternative node](./common-settings.json) and replace the former "define common settings" node by the imported one.
 
 ## Usage ##
 
