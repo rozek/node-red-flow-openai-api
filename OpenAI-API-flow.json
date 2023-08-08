@@ -614,7 +614,7 @@
                 "t": "set",
                 "p": "count-tokens",
                 "pt": "flow",
-                "to": "true",
+                "to": "false",
                 "tot": "bool"
             },
             {
