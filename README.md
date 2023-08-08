@@ -50,7 +50,7 @@ Finally, open the Flow Editor of your Node-RED server and import the contents of
 
 The node "define common settings" allows you to configure a few parameters which can not be passed along with a request. These are
 
-* **`API-Key`**<br>like the original, these flows allow you to protect your endpoints against abuse - which may become relevant as soon as you open the port of your Node-RED server in your LAN. By default, the key is `sk-xxx`, but you may configure anything else here which is then compared to its counterpart in any incoming request. If both differ, the request is rejected 
+* **`API-Key`**<br>like the original, these flows allow you to protect your endpoints against abuse - which may become relevant as soon as you open the port of your Node-RED server in your LAN. By default, the key is `sk-xxxx`, but you may configure anything else here which is then compared to its counterpart in any incoming request. If both differ, the request is rejected 
 * **`number-of-threads`**<br>allows you to configure the maximum number of threads used by llama.cpp executables. Internally, it is limited by the number of CPU cores your hardware provides
 * **`context-length`**<br>allows you to configure the maximum length of the inference context (including prompt). LLaMA 2 has been trained with a context length of 4096 which is therefore set as default
 * **`number-of-batches`**<br>see the [llama.cpp docs](https://github.com/rozek/llama.cpp/blob/master/examples/main/README.md#batch-size) for a description of the "batch size"
