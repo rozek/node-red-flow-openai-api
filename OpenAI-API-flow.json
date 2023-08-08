@@ -1,18 +1,8 @@
 [
     {
-        "id": "7de43e17655400bd",
-        "type": "comment",
-        "z": "82da24bd0fb90b8b",
-        "name": "OpenAI-compatible API",
-        "info": "",
-        "x": 120,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "49ff9e70f3453438",
+        "id": "042d477053ce2fa0",
         "type": "http in",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "/v1/embeddings",
         "url": "/v1/embeddings",
         "method": "post",
@@ -22,14 +12,14 @@
         "y": 280,
         "wires": [
             [
-                "5dae579222f27264"
+                "403d4faa78f86843"
             ]
         ]
     },
     {
-        "id": "da4466821138a8c2",
+        "id": "3a33cc26a0741094",
         "type": "http in",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "/v1/completions",
         "url": "/v1/completions",
         "method": "post",
@@ -39,14 +29,14 @@
         "y": 480,
         "wires": [
             [
-                "3f5450b1f7f9aaf6"
+                "60626c35ad22fca6"
             ]
         ]
     },
     {
-        "id": "5571b980dbde39d0",
+        "id": "539258e9f8fb70a4",
         "type": "http in",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "/v1/chat/completions",
         "url": "/v1/chat/completions",
         "method": "post",
@@ -56,14 +46,14 @@
         "y": 740,
         "wires": [
             [
-                "1eae5b9651fc75bc"
+                "b7fe99ba28c91f9e"
             ]
         ]
     },
     {
-        "id": "5dae579222f27264",
+        "id": "403d4faa78f86843",
         "type": "reusable",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "",
         "target": "api key check",
         "outputs": 2,
@@ -71,17 +61,17 @@
         "y": 280,
         "wires": [
             [
-                "cc62107216a2c6d9"
+                "bde440b6d97a6e97"
             ],
             [
-                "6939bc798a16831f"
+                "8fa1f0775f7b1119"
             ]
         ]
     },
     {
-        "id": "3f5450b1f7f9aaf6",
+        "id": "60626c35ad22fca6",
         "type": "reusable",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "",
         "target": "api key check",
         "outputs": 2,
@@ -89,17 +79,17 @@
         "y": 480,
         "wires": [
             [
-                "189fe066d97cc94e"
+                "cb3fa4c175841887"
             ],
             [
-                "2da1327358576bfc"
+                "090cd139fcad3749"
             ]
         ]
     },
     {
-        "id": "1eae5b9651fc75bc",
+        "id": "b7fe99ba28c91f9e",
         "type": "reusable",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "",
         "target": "api key check",
         "outputs": 2,
@@ -107,17 +97,17 @@
         "y": 740,
         "wires": [
             [
-                "d4c5ee20e0d87247"
+                "6fe1e92330d090e4"
             ],
             [
-                "ef562b4588954520"
+                "1b6df3d911561792"
             ]
         ]
     },
     {
-        "id": "ef562b4588954520",
+        "id": "1b6df3d911561792",
         "type": "http response",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -126,9 +116,9 @@
         "wires": []
     },
     {
-        "id": "6939bc798a16831f",
+        "id": "8fa1f0775f7b1119",
         "type": "http response",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -137,9 +127,9 @@
         "wires": []
     },
     {
-        "id": "2da1327358576bfc",
+        "id": "090cd139fcad3749",
         "type": "http response",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "",
         "statusCode": "",
         "headers": {},
@@ -148,9 +138,9 @@
         "wires": []
     },
     {
-        "id": "09b6f057a321b96c",
+        "id": "ac8d8692509c76de",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "LLaMA 2 Inference",
         "func": "(async () => {\n  let Prompt = msg.prompt\n  if ((flow.get('log') || []).indexOf('prompt') >= 0) {\n    node.warn('/v1/completions Prompt = \"' + Prompt + '\"\\n')\n  }\n\n  let Threads = parseInt(flow.get('number-of-threads'),10)\n  if (isNaN(Threads)) { Threads = 4 }\n  Threads = Math.max(1,Threads)\n  Threads = Math.min(Threads,Math.max(1,os.cpus().length))\n\n  let Context = parseInt(flow.get('context-length'),10)\n  if (isNaN(Context)) { Context = 512 }\n  Context = Math.max(0,Math.min(Context,4096))\n\n  let Batches = parseInt(flow.get('number-of-batches'),10)\n  if (isNaN(Batches)) { Batches = 8 }\n  Batches = Math.max(1,Math.min(Batches,100))\n\n/**** combine all these settings into a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --threads ' + Threads + ' --batch_size ' + Batches +\n    ' -c ' + Context + ' -n ' + msg.max_tokens +\n    ' --temp ' + msg.temperature + ' --top_p ' + msg.top_p +\n    ' --repeat-penalty ' + msg.frequency_penalty +\n    ' --prompt \\'' + encoded(Prompt) + '\\' --tfs 0.95'\n  )\n  \n  for (let i = 0, l = msg.stop.length; i < l; i++) {\n    Command += ' -r \\'' + encoded(msg.stop[i]) + '\\''\n  }\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let maxTokens = (msg.max_tokens < 0 ? Context : msg.max_tokens)\n    msg.finish_reason = (Text.length >= maxTokens ? 'length' : 'stop')\n    \n    if (Text.startsWith(Prompt)) {\n      Text = Text.slice(Prompt.length)\n    }\n\n    for (let i = 0, l = msg.stop.length; i < l; i++) {\n      if (Text.endsWith(msg.stop[i])) {\n        msg.finish_reason = 'stop'\n        \n        Text = Text.slice(0,-msg.stop[i].length)\n        return Text.trim()\n      }\n    }\n\n    return Text.trim()\n  }\n\n/**** now infer a response from the given prompt ****/\n\n  if ((flow.get('log') || []).indexOf('command') >= 0) {\n    node.warn('/v1/completions Command = \"' + Command + '\"\\n')\n  }\n\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  if ((flow.get('log') || []).indexOf('stdout') >= 0) {\n    node.warn('/v1/completions stdout = \"' + stdout + '\"\\n')\n  }\n\n  stderr = stderr.toString().trim()\n  if ((flow.get('log') || []).indexOf('stderr') >= 0) {\n    node.warn('/v1/completions stderr = \"' + stderr + '\"\\n')\n  }\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.payload    = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n})()\n\n/**** encoded ****/\n\n  function encoded (Text) {\n    return Text.replace(/'/g,\"'\\\"'\\\"'\")\n  }\n",
         "outputs": 2,
@@ -171,17 +161,17 @@
         "y": 600,
         "wires": [
             [
-                "a5fb554550f203b2"
+                "fc29637cdd46cfba"
             ],
             [
-                "2da1327358576bfc"
+                "090cd139fcad3749"
             ]
         ]
     },
     {
-        "id": "b6dfdddec687b9db",
+        "id": "cc8d0378347191e2",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "LLaMA 2 Embeddings",
         "func": "(async () => {\n  let Prompt = msg.input\n  if ((flow.get('log') || []).indexOf('prompt') >= 0) {\n    node.warn('/v1/embeddings Prompt = \"' + Prompt + '\"\\n')\n  }\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-embeddings --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \\'' + encoded(Prompt) + '\\''\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\s+/g,' ').split(' ')\n  }\n\n/**** now tokenize the given prompt ****/\n\n  if ((flow.get('log') || []).indexOf('command') >= 0) {\n    node.warn('/v1/embeddings Command = \"' + Command + '\"\\n')\n  }\n\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  if ((flow.get('log') || []).indexOf('stdout') >= 0) {\n    node.warn('/v1/embeddings stdout = \"' + stdout + '\"\\n')\n  }\n\n  stderr = stderr.toString().trim()\n  if ((flow.get('log') || []).indexOf('stderr') >= 0) {\n    node.warn('/v1/embeddings stderr = \"' + stderr + '\"\\n')\n  }\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.embedding = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n})()\n\n/**** encoded ****/\n\n  function encoded (Text) {\n    return Text.replace(/'/g,\"'\\\"'\\\"'\")\n  }\n",
         "outputs": 2,
@@ -202,19 +192,19 @@
         "y": 400,
         "wires": [
             [
-                "266427dd2bcbcdf6"
+                "ec7fde740aed9567"
             ],
             [
-                "6939bc798a16831f"
+                "8fa1f0775f7b1119"
             ]
         ]
     },
     {
-        "id": "cc62107216a2c6d9",
+        "id": "bde440b6d97a6e97",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "parse request body",
-        "func": "/**** parse request body ****/\n\n  let JSONPayload = msg.payload\n    if ((typeof JSONPayload !== 'object') || (JSONPayload == null)) {\n      return handleError(400,'request body is no valid JSON')\n    }\n  msg.model = JSONPayload.model\n    if ((typeof msg.model !== 'string') || (msg.model.trim() === '')) {\n      return handleError(400,'\"model\" must be a non-empty string')\n    }  \n  msg.input = JSONPayload.input\n    if (typeof msg.input !== 'string') {\n      return handleError(400,'\"input\" must be a string')\n    }\n  node.send([msg,null])\n  node.done()\n    \n/**** handleError ****/\n\n  function handleError (StatusCode, StatusText) {\n    msg.payload    = StatusText\n    msg.statusCode = StatusCode\n\n    node.send([null,msg])\n    node.done()\n  }\n",
+        "func": "/**** parse request body ****/\n\n  let JSONPayload = msg.payload\n    if ((typeof JSONPayload !== 'object') || (JSONPayload == null)) {\n      return handleError(400,'request body is no valid JSON')\n    }\n  msg.model = JSONPayload.model\n    if ((typeof msg.model !== 'string') || (msg.model.trim() === '')) {\n      return handleError(400,'\"model\" must be a non-empty string')\n    }  \n  msg.input = JSONPayload.input\n    if (typeof msg.input !== 'string') {\n      return handleError(400,'\"input\" must be a string')\n    }\n    msg.input = msg.input.replace(/[\\x7F-\\x9F\\u2028\\u2029\\uFFF9-\\uFFFB]/g,' ')\n  node.send([msg,null])\n  node.done()\n    \n/**** handleError ****/\n\n  function handleError (StatusCode, StatusText) {\n    msg.payload    = StatusText\n    msg.statusCode = StatusCode\n\n    node.send([null,msg])\n    node.done()\n  }\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -224,17 +214,17 @@
         "y": 340,
         "wires": [
             [
-                "e74bdbd85bc3650b"
+                "18e23a065fd63592"
             ],
             [
-                "6939bc798a16831f"
+                "8fa1f0775f7b1119"
             ]
         ]
     },
     {
-        "id": "94e796282b41a449",
+        "id": "79937f51b992b4ac",
         "type": "catch",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "uncaught exceptions",
         "scope": null,
         "uncaught": true,
@@ -242,14 +232,14 @@
         "y": 1000,
         "wires": [
             [
-                "0f9511dcddb4b4d7"
+                "3139b5cd0e19b096"
             ]
         ]
     },
     {
-        "id": "0f9511dcddb4b4d7",
+        "id": "3139b5cd0e19b096",
         "type": "debug",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "",
         "active": true,
         "tosidebar": true,
@@ -264,9 +254,9 @@
         "wires": []
     },
     {
-        "id": "266427dd2bcbcdf6",
+        "id": "ec7fde740aed9567",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "assemble response",
         "func": "/**** assemble response ****/\n\n  msg.statusCode = 200\n  msg.payload = {\n    model:'llama-2-13b.ggmlv3.q4_0',\n    object:'list',\n    data:[{\n      index:0,\n      object:'embedding',\n      embedding:msg.embedding\n    }],\n    usage:{\n      prompt_tokens:msg.prompt_tokens,\n      total_tokens: msg.prompt_tokens\n    }\n  }\n  \n/**** cleanup \"msg\" ****/\n  \n  delete msg.model\n  delete msg.input\n  delete msg.embedding\n  delete msg.prompt_tokens\n  \n  return msg",
         "outputs": 1,
@@ -278,16 +268,16 @@
         "y": 400,
         "wires": [
             [
-                "6939bc798a16831f"
+                "8fa1f0775f7b1119"
             ]
         ]
     },
     {
-        "id": "189fe066d97cc94e",
+        "id": "cb3fa4c175841887",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "parse request body",
-        "func": "/**** parse request body ****/\n\n  let JSONPayload = msg.payload\n    if ((typeof JSONPayload !== 'object') || (JSONPayload == null)) {\n      return handleError(400,'request body is no valid JSON')\n    }\n  msg.model = JSONPayload.model\n    if ((typeof msg.model !== 'string') || (msg.model.trim() === '')) {\n      return handleError(400,'\"model\" must be a non-empty string')\n    }  \n  msg.prompt = JSONPayload.prompt\n    if (Array.isArray(msg.prompt)) {\n      msg.prompt = msg.prompt[0]\n    }\n    \n    if (typeof msg.prompt !== 'string') {\n      return handleError(400,'\"prompt\" must be a string')\n    }\n  msg.max_tokens = (JSONPayload.max_tokens == null ? -1 : JSONPayload.max_tokens)\n    if (\n      (typeof msg.max_tokens !== 'number') ||\n      (Math.round(msg.max_tokens) !== msg.max_tokens) ||\n      (msg.max_tokens < -1)\n    ) {\n      return handleError(400,'\"max_tokens\" must be -1 or an integer >= 0')\n    }\n    \n    if (msg.max_tokens === -1) {\n      msg.max_tokens = flow.get('context-length')\n    } else {\n      msg.max_tokens = Math.min(msg.max_tokens,flow.get('context-length'))\n    }\n  msg.temperature = (JSONPayload.temperature == null ? 1.0 : JSONPayload.temperature)\n    if (\n      (typeof msg.temperature !== 'number') ||\n      (msg.temperature < 0) || (msg.temperature > 2)\n    ) {\n      return handleError(400,'\"temperature\" must be a number in the range 0...2')\n    }\n  msg.top_p = (JSONPayload.top_p == null ? 1.0 : JSONPayload.top_p)\n    if (\n      (typeof msg.top_p !== 'number') ||\n      (msg.top_p < 0) || (msg.top_p > 1)\n    ) {\n      return handleError(400,'\"top_p\" must be a number in the range 0...1')\n    }\n  msg.stop = JSONPayload.stop || []\n    if (typeof msg.stop === 'string') {\n      msg.stop = [msg.stop]\n    } else {\n      if (! Array.isArray(msg.stop) || (msg.stop.length > 4)) {\n        return handleError(400,'\"stop\" must be a single string or an array with up to 4 strings')\n      }\n      \n      for (let i = 0, l = msg.stop.length; i < l; i++) {\n        if (typeof msg.stop[i] !== 'string') {\n          return handleError(400,'\"stop\" must contain strings only')\n        }\n      }\n    }\n  msg.frequency_penalty = (JSONPayload.frequency_penalty == null ? 0 : JSONPayload.frequency_penalty)\n    if (\n      (typeof msg.frequency_penalty !== 'number') ||\n      (msg.frequency_penalty < -2) || (msg.frequency_penalty > 2)\n    ) {\n      return handleError(400,'\"frequency_penalty\" must be a number in the range -2...2')\n    }\n  node.send([msg,null])\n  node.done()\n    \n/**** handleError ****/\n\n  function handleError (StatusCode, StatusText) {\n    msg.payload    = StatusText\n    msg.statusCode = StatusCode\n\n    node.send([null,msg])\n    node.done()\n  }\n",
+        "func": "/**** parse request body ****/\n\n  let JSONPayload = msg.payload\n    if ((typeof JSONPayload !== 'object') || (JSONPayload == null)) {\n      return handleError(400,'request body is no valid JSON')\n    }\n  msg.model = JSONPayload.model\n    if ((typeof msg.model !== 'string') || (msg.model.trim() === '')) {\n      return handleError(400,'\"model\" must be a non-empty string')\n    }  \n  msg.prompt = JSONPayload.prompt\n    if (Array.isArray(msg.prompt)) {\n      msg.prompt = msg.prompt[0]\n    }\n    \n    if (typeof msg.prompt !== 'string') {\n      return handleError(400,'\"prompt\" must be a string')\n    }\n    \n    msg.prompt = msg.prompt.replace(/[\\x7F-\\x9F\\u2028\\u2029\\uFFF9-\\uFFFB]/g,' ')\n  msg.max_tokens = (JSONPayload.max_tokens == null ? -1 : JSONPayload.max_tokens)\n    if (\n      (typeof msg.max_tokens !== 'number') ||\n      (Math.round(msg.max_tokens) !== msg.max_tokens) ||\n      (msg.max_tokens < -1)\n    ) {\n      return handleError(400,'\"max_tokens\" must be -1 or an integer >= 0')\n    }\n    \n    if (msg.max_tokens === -1) {\n      msg.max_tokens = flow.get('context-length')\n    } else {\n      msg.max_tokens = Math.min(msg.max_tokens,flow.get('context-length'))\n    }\n  msg.temperature = (JSONPayload.temperature == null ? 1.0 : JSONPayload.temperature)\n    if (\n      (typeof msg.temperature !== 'number') ||\n      (msg.temperature < 0) || (msg.temperature > 2)\n    ) {\n      return handleError(400,'\"temperature\" must be a number in the range 0...2')\n    }\n  msg.top_p = (JSONPayload.top_p == null ? 1.0 : JSONPayload.top_p)\n    if (\n      (typeof msg.top_p !== 'number') ||\n      (msg.top_p < 0) || (msg.top_p > 1)\n    ) {\n      return handleError(400,'\"top_p\" must be a number in the range 0...1')\n    }\n  msg.stop = JSONPayload.stop || []\n    if (typeof msg.stop === 'string') {\n      msg.stop = [msg.stop]\n    } else {\n      if (! Array.isArray(msg.stop) || (msg.stop.length > 4)) {\n        return handleError(400,'\"stop\" must be a single string or an array with up to 4 strings')\n      }\n      \n      for (let i = 0, l = msg.stop.length; i < l; i++) {\n        if (typeof msg.stop[i] !== 'string') {\n          return handleError(400,'\"stop\" must contain strings only')\n        }\n      }\n    }\n  msg.frequency_penalty = (JSONPayload.frequency_penalty == null ? 0 : JSONPayload.frequency_penalty)\n    if (\n      (typeof msg.frequency_penalty !== 'number') ||\n      (msg.frequency_penalty < -2) || (msg.frequency_penalty > 2)\n    ) {\n      return handleError(400,'\"frequency_penalty\" must be a number in the range -2...2')\n    }\n  node.send([msg,null])\n  node.done()\n    \n/**** handleError ****/\n\n  function handleError (StatusCode, StatusText) {\n    msg.payload    = StatusText\n    msg.statusCode = StatusCode\n\n    node.send([null,msg])\n    node.done()\n  }\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -297,19 +287,19 @@
         "y": 540,
         "wires": [
             [
-                "f25b86492768781e"
+                "2de6a2769db42901"
             ],
             [
-                "2da1327358576bfc"
+                "090cd139fcad3749"
             ]
         ]
     },
     {
-        "id": "d4c5ee20e0d87247",
+        "id": "6fe1e92330d090e4",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "parse request body",
-        "func": "/**** parse request body ****/\n\n  let JSONPayload = msg.payload\n    if ((typeof JSONPayload !== 'object') || (JSONPayload == null)) {\n      return handleError(400,'request body is no valid JSON')\n    }\n  msg.model = JSONPayload.model\n    if ((typeof msg.model !== 'string') || (msg.model.trim() === '')) {\n      return handleError(400,'\"model\" must be a non-empty string')\n    }  \n  msg.messages = JSONPayload.messages\n    if (! Array.isArray(msg.messages)) {\n      return handleError(400,'\"messages\" must be a list of messages')\n    }\n    for (let i = 0, l = msg.messages.length; i < l; i++) {\n      let message = msg.messages[i]\n      if (\n        (message == null) || (typeof message !== 'object') ||\n        (['system','user','assistant'].indexOf(message.role) < 0) ||\n        (typeof message.content !== 'string')\n      ) {\n        return handleError(400,'\"messages\" must contain valid message objects only')\n      }\n    }\n  msg.max_tokens = (JSONPayload.max_tokens == null ? -1 : JSONPayload.max_tokens)\n    if (\n      (typeof msg.max_tokens !== 'number') ||\n      (Math.round(msg.max_tokens) !== msg.max_tokens) ||\n      (msg.max_tokens < -1)\n    ) {\n      return handleError(400,'\"max_tokens\" must be -1 or an integer >= 0')\n    }\n    \n    if (msg.max_tokens === -1) {\n      msg.max_tokens = flow.get('context-length')\n    } else {\n      msg.max_tokens = Math.min(msg.max_tokens,flow.get('context-length'))\n    }\n  msg.temperature = (JSONPayload.temperature == null ? 1.0 : JSONPayload.temperature)\n    if (\n      (typeof msg.temperature !== 'number') ||\n      (msg.temperature < 0) || (msg.temperature > 2)\n    ) {\n      return handleError(400,'\"temperature\" must be a number in the range 0...2')\n    }\n  msg.top_p = (JSONPayload.top_p == null ? 1.0 : JSONPayload.top_p)\n    if (\n      (typeof msg.top_p !== 'number') ||\n      (msg.top_p < 0) || (msg.top_p > 1)\n    ) {\n      return handleError(400,'\"top_p\" must be a number in the range 0...1')\n    }\n  msg.stop = JSONPayload.stop || []\n    if (typeof msg.stop === 'string') {\n      msg.stop = [msg.stop]\n    } else {\n      if (! Array.isArray(msg.stop) || (msg.stop.length > 4)) {\n        return handleError(400,'\"stop\" must be a single string or an array with up to 4 strings')\n      }\n      \n      for (let i = 0, l = msg.stop.length; i < l; i++) {\n        if (typeof msg.stop[i] !== 'string') {\n          return handleError(400,'\"stop\" must contain strings only')\n        }\n      }\n    }\n  msg.frequency_penalty = (JSONPayload.frequency_penalty == null ? 0 : JSONPayload.frequency_penalty)\n    if (\n      (typeof msg.frequency_penalty !== 'number') ||\n      (msg.frequency_penalty < -2) || (msg.frequency_penalty > 2)\n    ) {\n      return handleError(400,'\"frequency_penalty\" must be a number in the range -2...2')\n    }\n    \n  let Prompt = ''\n    for (let i = 0, l = msg.messages.length; i < l; i++) {\n      let Message = msg.messages[i]\n      Prompt += flow.get('prompt-template')[Message.role].replace('{input}',Message.content)\n    }\n  msg.prompt = Prompt += flow.get('prompt-template')['suffix']\n  \n  node.send([msg,null])\n  node.done()\n    \n/**** handleError ****/\n\n  function handleError (StatusCode, StatusText) {\n    msg.payload    = StatusText\n    msg.statusCode = StatusCode\n\n    node.send([null,msg])\n    node.done()\n  }\n",
+        "func": "/**** parse request body ****/\n\n  let JSONPayload = msg.payload\n    if ((typeof JSONPayload !== 'object') || (JSONPayload == null)) {\n      return handleError(400,'request body is no valid JSON')\n    }\n  msg.model = JSONPayload.model\n    if ((typeof msg.model !== 'string') || (msg.model.trim() === '')) {\n      return handleError(400,'\"model\" must be a non-empty string')\n    }  \n  msg.messages = JSONPayload.messages\n    if (! Array.isArray(msg.messages)) {\n      return handleError(400,'\"messages\" must be a list of messages')\n    }\n    for (let i = 0, l = msg.messages.length; i < l; i++) {\n      let message = msg.messages[i]\n      if (\n        (message == null) || (typeof message !== 'object') ||\n        (['system','user','assistant'].indexOf(message.role) < 0) ||\n        (typeof message.content !== 'string')\n      ) {\n        return handleError(400,'\"messages\" must contain valid message objects only')\n      }\n    }\n  msg.max_tokens = (JSONPayload.max_tokens == null ? -1 : JSONPayload.max_tokens)\n    if (\n      (typeof msg.max_tokens !== 'number') ||\n      (Math.round(msg.max_tokens) !== msg.max_tokens) ||\n      (msg.max_tokens < -1)\n    ) {\n      return handleError(400,'\"max_tokens\" must be -1 or an integer >= 0')\n    }\n    \n    if (msg.max_tokens === -1) {\n      msg.max_tokens = flow.get('context-length')\n    } else {\n      msg.max_tokens = Math.min(msg.max_tokens,flow.get('context-length'))\n    }\n  msg.temperature = (JSONPayload.temperature == null ? 1.0 : JSONPayload.temperature)\n    if (\n      (typeof msg.temperature !== 'number') ||\n      (msg.temperature < 0) || (msg.temperature > 2)\n    ) {\n      return handleError(400,'\"temperature\" must be a number in the range 0...2')\n    }\n  msg.top_p = (JSONPayload.top_p == null ? 1.0 : JSONPayload.top_p)\n    if (\n      (typeof msg.top_p !== 'number') ||\n      (msg.top_p < 0) || (msg.top_p > 1)\n    ) {\n      return handleError(400,'\"top_p\" must be a number in the range 0...1')\n    }\n  msg.stop = JSONPayload.stop || []\n    if (typeof msg.stop === 'string') {\n      msg.stop = [msg.stop]\n    } else {\n      if (! Array.isArray(msg.stop) || (msg.stop.length > 4)) {\n        return handleError(400,'\"stop\" must be a single string or an array with up to 4 strings')\n      }\n      \n      for (let i = 0, l = msg.stop.length; i < l; i++) {\n        if (typeof msg.stop[i] !== 'string') {\n          return handleError(400,'\"stop\" must contain strings only')\n        }\n      }\n    }\n  msg.frequency_penalty = (JSONPayload.frequency_penalty == null ? 0 : JSONPayload.frequency_penalty)\n    if (\n      (typeof msg.frequency_penalty !== 'number') ||\n      (msg.frequency_penalty < -2) || (msg.frequency_penalty > 2)\n    ) {\n      return handleError(400,'\"frequency_penalty\" must be a number in the range -2...2')\n    }\n    \n  let Prompt = ''\n    for (let i = 0, l = msg.messages.length; i < l; i++) {\n      let { role,content } = msg.messages[i]\n        content = content.replace(/[\\x7F-\\x9F\\u2028\\u2029\\uFFF9-\\uFFFB]/g,' ')\n      Prompt += flow.get('prompt-template')[role].replace('{input}',content)\n    }\n  msg.prompt = Prompt += flow.get('prompt-template')['suffix']\n  \n  node.send([msg,null])\n  node.done()\n    \n/**** handleError ****/\n\n  function handleError (StatusCode, StatusText) {\n    msg.payload    = StatusText\n    msg.statusCode = StatusCode\n\n    node.send([null,msg])\n    node.done()\n  }\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -319,19 +309,19 @@
         "y": 800,
         "wires": [
             [
-                "0799dfad4bb9ebb7"
+                "7b9ef77fa592bd30"
             ],
             [
-                "ef562b4588954520"
+                "1b6df3d911561792"
             ]
         ]
     },
     {
-        "id": "78cbd7a2e2c84d5d",
+        "id": "f821bb3f45885b4f",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "LLaMA 2 Inference",
-        "func": "(async () => {\n  let Prompt = msg.prompt\n  if ((flow.get('log') || []).indexOf('prompt') >= 0) {\n    node.warn('/v1/chat/completions Prompt = \"' + Prompt + '\"\\n')\n  }\n\n  let Threads = parseInt(flow.get('number-of-threads'),10)\n  if (isNaN(Threads)) { Threads = 4 }\n  Threads = Math.max(1,Threads)\n  Threads = Math.min(Threads,Math.max(1,os.cpus().length))\n\n  let Context = parseInt(flow.get('context-length'),10)\n  if (isNaN(Context)) { Context = 512 }\n  Context = Math.max(0,Math.min(Context,4096))\n\n  let Batches = parseInt(flow.get('number-of-batches'),10)\n  if (isNaN(Batches)) { Batches = 8 }\n  Batches = Math.max(1,Math.min(Batches,100))\n\n/**** combine all these settings into a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --threads ' + Threads + ' --batch_size ' + Batches +\n    ' -c ' + Context + ' -n ' + msg.max_tokens +\n    ' --temp ' + msg.temperature + ' --top_p ' + msg.top_p +\n    ' --repeat-penalty ' + msg.frequency_penalty +\n    ' --prompt \\'' + encoded(Prompt) + '\\' --tfs 0.95'\n  )\n  \n  if (flow.get('stop-sequence') != null) {\n    Command += ' -r \\'' + encoded(flow.get('stop-sequence')) + '\\''\n  }\n  \n  for (let i = 0, l = msg.stop.length; i < l; i++) {\n    Command += ' -r \\'' + encoded(msg.stop[i]) + '\\''\n  }\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let maxTokens = (msg.max_tokens < 0 ? Context : msg.max_tokens)\n    msg.finish_reason = (Text.length >= maxTokens ? 'length' : 'stop')\n    \n    if (Text.startsWith(msg.prompt)) {\n      Text = Text.slice(msg.prompt.length)\n    }\n\n    if (flow.get('stop') != null) {\n      let stop = flow.get('stop-sequence')\n      if (Text.endsWith(stop)) {\n        msg.finish_reason = 'stop'\n        \n        Text = Text.slice(0,-stop.length)\n        return Text.trim()\n      }\n    }\n\n    for (let i = 0, l = msg.stop.length; i < l; i++) {\n      if (Text.endsWith(msg.stop[i])) {\n        msg.finish_reason = 'stop'\n        \n        Text = Text.slice(0,-msg.stop[i].length)\n        return Text.trim()\n      }\n    }\n\n    return Text.trim()\n  }\n\n/**** now infer a response from the given prompt ****/\n\n  if ((flow.get('log') || []).indexOf('command') >= 0) {\n    node.warn('/v1/chat/completions Command = \"' + Command + '\"\\n')\n  }\n\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  if ((flow.get('log') || []).indexOf('stdout') >= 0) {\n    node.warn('/v1/chat/completions stdout = \"' + stdout + '\"\\n')\n  }\n\n  stderr = stderr.toString().trim()\n  if ((flow.get('log') || []).indexOf('stderr') >= 0) {\n    node.warn('/v1/chat/completions stderr = \"' + stderr + '\"\\n')\n  }\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.payload    = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n})()\n\n/**** encoded ****/\n\n  function encoded (Text) {\n    return Text.replace(/'/g,\"'\\\"'\\\"'\")\n  }\n",
+        "func": "(async () => {\n  let Prompt = msg.prompt\n  if ((flow.get('log') || []).indexOf('prompt') >= 0) {\n    node.warn('/v1/chat/completions Prompt = \"' + Prompt + '\"\\n')\n  }\n\n  let Threads = parseInt(flow.get('number-of-threads'),10)\n  if (isNaN(Threads)) { Threads = 4 }\n  Threads = Math.max(1,Threads)\n  Threads = Math.min(Threads,Math.max(1,os.cpus().length))\n\n  let Context = parseInt(flow.get('context-length'),10)\n  if (isNaN(Context)) { Context = 512 }\n  Context = Math.max(0,Math.min(Context,4096))\n\n  let Batches = parseInt(flow.get('number-of-batches'),10)\n  if (isNaN(Batches)) { Batches = 8 }\n  Batches = Math.max(1,Math.min(Batches,100))\n\n/**** combine all these settings into a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --threads ' + Threads + ' --batch_size ' + Batches +\n    ' -c ' + Context + ' -n ' + msg.max_tokens +\n    ' --temp ' + msg.temperature + ' --top_p ' + msg.top_p +\n    ' --repeat-penalty ' + msg.frequency_penalty +\n    ' --prompt \\'' + encoded(Prompt) + '\\' --tfs 0.95'\n  )\n  \n  if (flow.get('stop-sequence') != null) {\n    Command += ' -r \\'' + encoded(flow.get('stop-sequence')) + '\\''\n  }\n  \n  for (let i = 0, l = msg.stop.length; i < l; i++) {\n    Command += ' -r \\'' + encoded(msg.stop[i]) + '\\''\n  }\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let maxTokens = (msg.max_tokens < 0 ? Context : msg.max_tokens)\n    msg.finish_reason = (Text.length >= maxTokens ? 'length' : 'stop')\n    \n    if (Text.startsWith(msg.prompt)) {\n      Text = Text.slice(msg.prompt.length)\n    }\n\n    if (flow.get('stop-sequence') != null) {\n      let stop = flow.get('stop-sequence')\n      if (Text.endsWith(stop)) {\n        msg.finish_reason = 'stop'\n        \n        Text = Text.slice(0,-stop.length)\n        return Text.trim()\n      }\n    }\n\n    for (let i = 0, l = msg.stop.length; i < l; i++) {\n      if (Text.endsWith(msg.stop[i])) {\n        msg.finish_reason = 'stop'\n        \n        Text = Text.slice(0,-msg.stop[i].length)\n        return Text.trim()\n      }\n    }\n\n    return Text.trim()\n  }\n\n/**** now infer a response from the given prompt ****/\n\n  if ((flow.get('log') || []).indexOf('command') >= 0) {\n    node.warn('/v1/chat/completions Command = \"' + Command + '\"\\n')\n  }\n\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  if ((flow.get('log') || []).indexOf('stdout') >= 0) {\n    node.warn('/v1/chat/completions stdout = \"' + stdout + '\"\\n')\n  }\n\n  stderr = stderr.toString().trim()\n  if ((flow.get('log') || []).indexOf('stderr') >= 0) {\n    node.warn('/v1/chat/completions stderr = \"' + stderr + '\"\\n')\n  }\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.payload    = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n})()\n\n/**** encoded ****/\n\n  function encoded (Text) {\n    return Text.replace(/'/g,\"'\\\"'\\\"'\")\n  }\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -350,17 +340,17 @@
         "y": 860,
         "wires": [
             [
-                "ef7682ecdbce8cdf"
+                "3da2611c7b4f747b"
             ],
             [
-                "ef562b4588954520"
+                "1b6df3d911561792"
             ]
         ]
     },
     {
-        "id": "8c8fe2a2f27ec4ab",
+        "id": "9e43f750435a462a",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "assemble response",
         "func": "/**** assemble response ****/\n\n  let maxTokens = (msg.max_tokens < 0 ? Infinity : msg.max_tokens)\n\n  msg.statusCode = 200\n  msg.payload = {\n    id:'chatcmpl-' + msg._msgid,\n    object:'chat.completion',\n    created:Date.now(),\n    model:'llama-2-13b.ggmlv3.q4_0',\n    choices:[{\n      index:0,\n      message:{\n        role:'assistant',\n        content:msg.payload\n      },\n      finish_reason:msg.finish_reason\n    }],\n    usage:{\n      prompt_tokens:msg.prompt_tokens,\n      completion_tokens:msg.completion_tokens,\n      total_tokens: msg.prompt_tokens + msg.completion_tokens\n    }\n  }\n  \n/**** cleanup \"msg\" ****/\n\n  delete msg.model\n  delete msg.messages\n  delete msg.prompt\n  delete msg.max_tokens\n  delete msg.temperature\n  delete msg.top_p\n  delete msg.stream\n  delete msg.stop\n  delete msg.frequency_penalty\n  delete msg.prompt_tokens\n  delete msg.completion_tokens\n  delete msg.finish_reason\n  \n  return msg",
         "outputs": 1,
@@ -372,14 +362,14 @@
         "y": 920,
         "wires": [
             [
-                "ef562b4588954520"
+                "1b6df3d911561792"
             ]
         ]
     },
     {
-        "id": "8b8bed0ed98d6c96",
+        "id": "4b34b78ca5d559ae",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "assemble response",
         "func": "/**** assemble response ****/\n\n  let maxTokens = (msg.max_tokens < 0 ? Infinity : msg.max_tokens)\n\n  msg.statusCode = 200\n  msg.payload = {\n    id:'cmpl-' + msg._msgid,\n    object:'text_completion',\n    created:Date.now(),\n    model:'llama-2-13b.ggmlv3.q4_0',\n    choices:[{\n      index:0,\n      text:msg.payload,\n      logprobs:null,\n      finish_reason:msg.finish_reason\n    }],\n    usage:{\n      prompt_tokens:msg.prompt_tokens,\n      completion_tokens:msg.completion_tokens,\n      total_tokens: msg.prompt_tokens + msg.completion_tokens\n    }\n  }\n  \n/**** cleanup \"msg\" ****/\n  \n  delete msg.model\n  delete msg.prompt\n  delete msg.max_tokens\n  delete msg.temperature\n  delete msg.top_p\n  delete msg.stream\n  delete msg.stop\n  delete msg.frequency_penalty\n  delete msg.prompt_tokens\n  delete msg.completion_tokens\n  delete msg.finish_reason\n  \n  return msg",
         "outputs": 1,
@@ -391,16 +381,16 @@
         "y": 660,
         "wires": [
             [
-                "2da1327358576bfc"
+                "090cd139fcad3749"
             ]
         ]
     },
     {
-        "id": "e74bdbd85bc3650b",
+        "id": "18e23a065fd63592",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "count prompt tokens",
-        "func": "(async () => {\n  if (flow.get('count-tokens') != true) {\n    msg.prompt_tokens = 0\n    \n    node.send([msg,null])\n    node.done()\n    \n    return\n  }\n  \n/**** prepare prompt as a command argument ****/\n    \n  let Prompt = msg.input || msg.prompt\n  Prompt = Prompt.replace(/\"/g,'\\\\\"')\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-tokens --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \"' + Prompt + '\"'\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\s+/g,' ').split(' ').length\n  }\n\n/**** now tokenize the given prompt ****/\n\nnode.warn('counting prompt tokens')\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  stderr = stderr.toString().trim()\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.prompt_tokens = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n  node.done()\n})()\n",
+        "func": "(async () => {\n  if (flow.get('count-tokens') != true) {\n    msg.prompt_tokens = 0\n    \n    node.send([msg,null])\n    node.done()\n    \n    return\n  }\n  \n/**** prepare prompt as a command argument ****/\n    \n  let Prompt = msg.input || msg.prompt\n  Prompt = Prompt.replace(/\"/g,'\\\\\"')\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-tokens --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \\'' + encoded(Prompt) + '\\''\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\n\\n/g,'\\\\n\\n').split('\\n').length\n  }\n\n/**** now tokenize the given prompt ****/\n\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  stderr = stderr.toString().trim()\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.prompt_tokens = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n  node.done()\n})()\n\n/**** encoded ****/\n\n  function encoded (Text) {\n    return Text.replace(/'/g,\"'\\\"'\\\"'\")\n  }\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -419,19 +409,19 @@
         "y": 340,
         "wires": [
             [
-                "b6dfdddec687b9db"
+                "cc8d0378347191e2"
             ],
             [
-                "6939bc798a16831f"
+                "8fa1f0775f7b1119"
             ]
         ]
     },
     {
-        "id": "ef7682ecdbce8cdf",
+        "id": "3da2611c7b4f747b",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "count completion tokens",
-        "func": "(async () => {\n  if (flow.get('count-tokens') != true) {\n    msg.completion_tokens = 0\n    \n    node.send([msg,null])\n    node.done()\n    \n    return\n  }\n  \n/**** prepare prompt as a command argument ****/\n    \n  let Prompt = msg.payload\n  Prompt = Prompt.replace(/\"/g,'\\\\\"')\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-tokens --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \"' + Prompt + '\"'\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\s+/g,' ').split(' ').length\n  }\n\n/**** now tokenize the given response ****/\n\nnode.warn('counting completion tokens')\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  stderr = stderr.toString().trim()\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.completion_tokens = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n  node.done()\n})()\n",
+        "func": "(async () => {\n  if (flow.get('count-tokens') != true) {\n    msg.completion_tokens = 0\n    \n    node.send([msg,null])\n    node.done()\n    \n    return\n  }\n  \n/**** prepare prompt as a command argument ****/\n    \n  let Prompt = msg.payload\n  Prompt = Prompt.replace(/\"/g,'\\\\\"')\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-tokens --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \\'' + encoded(Prompt) + '\\''\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\n\\n/g,'\\\\n\\n').split('\\n').length\n  }\n\n/**** now tokenize the given response ****/\n\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  stderr = stderr.toString().trim()\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.completion_tokens = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n  node.done()\n})()\n\n/**** encoded ****/\n\n  function encoded (Text) {\n    return Text.replace(/'/g,\"'\\\"'\\\"'\")\n  }\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -450,19 +440,19 @@
         "y": 860,
         "wires": [
             [
-                "8c8fe2a2f27ec4ab"
+                "9e43f750435a462a"
             ],
             [
-                "ef562b4588954520"
+                "1b6df3d911561792"
             ]
         ]
     },
     {
-        "id": "f25b86492768781e",
+        "id": "2de6a2769db42901",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "count prompt tokens",
-        "func": "(async () => {\n  if (flow.get('count-tokens') != true) {\n    msg.prompt_tokens = 0\n    \n    node.send([msg,null])\n    node.done()\n    \n    return\n  }\n  \n/**** prepare prompt as a command argument ****/\n    \n  let Prompt = msg.input || msg.prompt\n  Prompt = Prompt.replace(/\"/g,'\\\\\"')\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-tokens --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \"' + Prompt + '\"'\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\s+/g,' ').split(' ').length\n  }\n\n/**** now tokenize the given prompt ****/\n\nnode.warn('counting prompt tokens')\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  stderr = stderr.toString().trim()\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.prompt_tokens = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n  node.done()\n})()\n",
+        "func": "(async () => {\n  if (flow.get('count-tokens') != true) {\n    msg.prompt_tokens = 0\n    \n    node.send([msg,null])\n    node.done()\n    \n    return\n  }\n  \n/**** prepare prompt as a command argument ****/\n    \n  let Prompt = msg.input || msg.prompt\n  Prompt = Prompt.replace(/\"/g,'\\\\\"')\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-tokens --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \\'' + encoded(Prompt) + '\\''\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\n\\n/g,'\\\\n\\n').split('\\n').length\n  }\n\n/**** now tokenize the given prompt ****/\n\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  stderr = stderr.toString().trim()\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.prompt_tokens = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n  node.done()\n})()\n\n/**** encoded ****/\n\n  function encoded (Text) {\n    return Text.replace(/'/g,\"'\\\"'\\\"'\")\n  }\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -481,19 +471,19 @@
         "y": 540,
         "wires": [
             [
-                "09b6f057a321b96c"
+                "ac8d8692509c76de"
             ],
             [
-                "2da1327358576bfc"
+                "090cd139fcad3749"
             ]
         ]
     },
     {
-        "id": "a5fb554550f203b2",
+        "id": "fc29637cdd46cfba",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "count completion tokens",
-        "func": "(async () => {\n  if (flow.get('count-tokens') != true) {\n    msg.completion_tokens = 0\n    \n    node.send([msg,null])\n    node.done()\n    \n    return\n  }\n  \n/**** prepare prompt as a command argument ****/\n    \n  let Prompt = msg.payload\n  Prompt = Prompt.replace(/\"/g,'\\\\\"')\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-tokens --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \"' + Prompt + '\"'\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\s+/g,' ').split(' ').length\n  }\n\n/**** now tokenize the given response ****/\n\nnode.warn('counting completion tokens')\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  stderr = stderr.toString().trim()\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.completion_tokens = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n  node.done()\n})()\n",
+        "func": "(async () => {\n  if (flow.get('count-tokens') != true) {\n    msg.completion_tokens = 0\n    \n    node.send([msg,null])\n    node.done()\n    \n    return\n  }\n  \n/**** prepare prompt as a command argument ****/\n    \n  let Prompt = msg.payload\n  Prompt = Prompt.replace(/\"/g,'\\\\\"')\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-tokens --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \\'' + encoded(Prompt) + '\\''\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\n\\n/g,'\\\\n\\n').split('\\n').length\n  }\n\n/**** now tokenize the given response ****/\n\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  stderr = stderr.toString().trim()\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.completion_tokens = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n  node.done()\n})()\n\n/**** encoded ****/\n\n  function encoded (Text) {\n    return Text.replace(/'/g,\"'\\\"'\\\"'\")\n  }\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -512,19 +502,19 @@
         "y": 600,
         "wires": [
             [
-                "8b8bed0ed98d6c96"
+                "4b34b78ca5d559ae"
             ],
             [
-                "2da1327358576bfc"
+                "090cd139fcad3749"
             ]
         ]
     },
     {
-        "id": "0799dfad4bb9ebb7",
+        "id": "7b9ef77fa592bd30",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "count prompt tokens",
-        "func": "(async () => {\n  if (flow.get('count-tokens') != true) {\n    msg.prompt_tokens = 0\n    \n    node.send([msg,null])\n    node.done()\n\n    return\n  }\n  \n/**** prepare prompt as a command argument ****/\n    \n  let Prompt = msg.input || msg.prompt\n  Prompt = Prompt.replace(/\"/g,'\\\\\"')\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-tokens --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \"' + Prompt + '\"'\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\s+/g,' ').split(' ').length\n  }\n\n/**** now tokenize the given prompt ****/\n\nnode.warn('counting prompt tokens')\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  stderr = stderr.toString().trim()\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.prompt_tokens = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n  node.done()\n})()\n",
+        "func": "(async () => {\n  if (flow.get('count-tokens') != true) {\n    msg.prompt_tokens = 0\n    \n    node.send([msg,null])\n    node.done()\n\n    return\n  }\n  \n/**** prepare prompt as a command argument ****/\n    \n  let Prompt = msg.input || msg.prompt\n  Prompt = Prompt.replace(/\"/g,'\\\\\"')\n\n/**** construct a command ****/\n\n  let Command = ( 'cd ai && ' +\n    './llama-tokens --model ./llama-2-13b.ggmlv3.q4_0.bin --mlock ' +\n    ' --prompt \\'' + encoded(Prompt) + '\\''\n  )\n\n/**** extract actual reponse from command output ****/\n\n  function ResponseFrom (Text) {\n    let HeaderLength = Text.indexOf('system_info')\n    Text = Text.slice(HeaderLength + 1)\n      .replace(/^[^\\n]*\\n/,'')\n\n    let TrailerIndex = Text.indexOf('\\n\\nllama_print_timings')\n    Text = Text.slice(0,TrailerIndex)\n\n    return Text.replace(/\\n\\n/g,'\\\\n\\n').split('\\n').length\n  }\n\n/**** now tokenize the given prompt ****/\n\n  let { stdout,stderr, StatusCode,Signal } = child_process.spawnSync(\n    'bash', [], { input:Command }\n  )\n\n  stdout = stdout.toString().trim()\n  stderr = stderr.toString().trim()\n\n  switch (true) {\n    case (StatusCode == null):\n    case (StatusCode === 0):\n      msg.statusCode = (stdout === '' ? 204 : 200)\n      msg.prompt_tokens = ResponseFrom(stdout)\n      break\n    default:\n      msg.statusCode = 500 + StatusCode\n      msg.payload    = (stdout === '' ? '' : '>>>> stdout >>>>\\n' + stdout + '\\n') +\n                       '>>>> stderr >>>>\\n' + stderr +\n                       (Signal == null ? '' : '\\n' + Signal)\n      break\n  }\n\n  node.send([msg,null])\n  node.done()\n})()\n\n/**** encoded ****/\n\n  function encoded (Text) {\n    return Text.replace(/'/g,\"'\\\"'\\\"'\")\n  }\n",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
@@ -543,17 +533,17 @@
         "y": 800,
         "wires": [
             [
-                "78cbd7a2e2c84d5d"
+                "f821bb3f45885b4f"
             ],
             [
-                "ef562b4588954520"
+                "1b6df3d911561792"
             ]
         ]
     },
     {
-        "id": "160fdecf43f71c65",
+        "id": "d82ad2aa5ab6261d",
         "type": "inject",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "on start-up",
         "props": [
             {
@@ -575,14 +565,14 @@
         "y": 100,
         "wires": [
             [
-                "936d6293f8f40254"
+                "dcada28d45c44488"
             ]
         ]
     },
     {
-        "id": "936d6293f8f40254",
+        "id": "dcada28d45c44488",
         "type": "change",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "define common settings",
         "rules": [
             {
@@ -624,7 +614,7 @@
                 "t": "set",
                 "p": "count-tokens",
                 "pt": "flow",
-                "to": "false",
+                "to": "true",
                 "tot": "bool"
             },
             {
@@ -654,9 +644,9 @@
         ]
     },
     {
-        "id": "ebef1c7c36c2955a",
+        "id": "826c4db86f9f6d6d",
         "type": "function",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "validate API Key",
         "func": "  let APIKey = (flow.get('API-Key') || '').trim()\n  if (APIKey === '') { return authorized() }\n\n  let Credentials = msg.req.headers['authorization'] || ''\n  if (! Credentials.startsWith('Bearer ')) {\n    return unauthorized()\n  }\n\n  Credentials = Credentials.replace(/^Bearer\\s+/,'')\n  return (Credentials === APIKey ? authorized() : unauthorized())\n\n  function authorized () {\n    node.send([msg,null])\n    node.done()\n  }\n\n  function unauthorized () {\n    msg.payload    = 'Unauthorized'\n    msg.statusCode = 401\n\n    node.send([null,msg])\n    node.done()\n  }\n",
         "outputs": 2,
@@ -673,17 +663,17 @@
         "y": 180,
         "wires": [
             [
-                "121431785ceb72e3"
+                "5e59842de25894da"
             ],
             [
-                "b2a4009e8e1a0213"
+                "1344258fd89e16a2"
             ]
         ]
     },
     {
-        "id": "37c9cf4e084a2e1e",
+        "id": "37287266935d7e50",
         "type": "reusable-in",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "API Key Check",
         "info": "describe your reusable flow here",
         "scope": "global",
@@ -691,14 +681,14 @@
         "y": 180,
         "wires": [
             [
-                "ebef1c7c36c2955a"
+                "826c4db86f9f6d6d"
             ]
         ]
     },
     {
-        "id": "121431785ceb72e3",
+        "id": "5e59842de25894da",
         "type": "reusable-out",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "valid",
         "position": 1,
         "x": 470,
@@ -706,9 +696,9 @@
         "wires": []
     },
     {
-        "id": "b2a4009e8e1a0213",
+        "id": "1344258fd89e16a2",
         "type": "reusable-out",
-        "z": "82da24bd0fb90b8b",
+        "z": "9790d47c1aa98ed6",
         "name": "invalid",
         "position": "2",
         "x": 470,
