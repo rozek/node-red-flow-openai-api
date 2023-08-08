@@ -97,6 +97,19 @@ The set of supported request properties is an intersection of those [specified b
 
 ## Best Practices ##
 
+In order to get the best of LLaMA 2, you want to observe the following recommendations:
+
+### Do not rely on Open AI Defaults ###
+
+The defaults applied within the flows are those specified in the OpenAI API.
+
+However, these defaults do not fit well to the LLaMA 2 models and should therefore be replaced by more adequate values, in particular for the following parameters:
+
+* `top_p`: do not use `1` but reduce it to s.th. like 0.5 or lower,
+* `frequency_penalty`: LLaMA 2 almost _requires_ the `frequency_penalty` to be set to values above 0 (the OpenAI default). The `llama.cpp` default `1.1` performs quite well
+
+### Explicitly define Stop Sequences ###
+
 While llama.cpp works quite well using the LLaMA 2 LLM, it tends to spit out an endless stream of tokens (which takes ages to complete and does not lead to useful answers). Setting a maximum for the number of tokens to be generated is not always helpful as it may cut off a (potential useful) answer.
 
 Instead, **it is recommended to define stop sequences!**. Llama.cpp obeyes these sequences and, thus, avoids many useless repetitions.
