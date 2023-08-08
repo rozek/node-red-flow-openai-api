@@ -99,14 +99,14 @@ The set of supported request properties is an intersection of those [specified b
 
 In order to get the best of LLaMA 2, you want to observe the following recommendations:
 
-### Do not rely on Open AI Defaults ###
+### Do not rely on OpenAI Defaults ###
 
 The defaults applied within the flows are those specified in the OpenAI API.
 
 However, these defaults do not fit well to the LLaMA 2 models and should therefore be replaced by more adequate values, in particular for the following parameters:
 
-* `top_p`: do not use `1` but reduce it to s.th. like 0.5 or lower,
-* `frequency_penalty`: LLaMA 2 almost _requires_ the `frequency_penalty` to be set to values above 0 (the OpenAI default). The `llama.cpp` default `1.1` performs quite well
+* `top_p`: do not use the default value of `1` but reduce it to s.th. like 0.5 or lower,
+* `frequency_penalty`: LLaMA 2 almost _requires_ the `frequency_penalty` to be set to values above 0 (the OpenAI default) for meaningful results. The `llama.cpp` default `1.1` performs quite well
 
 ### Explicitly define Stop Sequences ###
 
